@@ -1,8 +1,8 @@
 name: run
 
-on:
-  schedule:
-    - cron: "30 0 * * *" #runs at 00:30 UTC everyday
+on: workflow_dispatch
+#   schedule:
+#     - cron: "30 0 * * *" #runs at 00:30 UTC everyday
 
 jobs:
   build:

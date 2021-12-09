@@ -118,4 +118,4 @@ async def toBtyes(resp):
 
 
 if __name__ == '__main__':
-    await getBriefing()
+    asyncio.run(getBriefing())

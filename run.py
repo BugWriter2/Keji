@@ -1,3 +1,7 @@
+"""
+Code is stolen from https://github.com/AnJT/mirai
+"""
+
 import asyncio
 import json
 

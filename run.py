@@ -45,7 +45,6 @@ async def news_result(html):
             url = li.a['href']
             div = li.find_all('div')[1]
             if div.div.a.text == '易即今日':
-                print(f'url found: {url}')
                 return url
             print(div.div.a.text)
         except Exception as e:
@@ -90,7 +89,6 @@ async def getBriefing():
             query = f'“今日简报({month}月{day}日)” 易即今日'
             url = await search(session, cookies, headers, query)
         url = await url_decode(url)
-        url = 'https://weixin.sogou.com/weixin'
         params = {
             'wx_fmt': 'jpeg'
         }  

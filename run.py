@@ -58,28 +58,38 @@ async def url_decode(r):
     url += '&k=' + str(b) + '&h=' + a
     return url
 
+
+async def search(session, cookies, headers, query):
+    print(f'searching {query}...')
+    url = 'https://weixin.sogou.com/weixin'
+    params = {
+        'type': 2,
+        's_from': 'input',
+        'ie': 'uft8',
+        '_sug_': 'n',
+        '_sug_type_': '',
+        'query': query
+    }
+    async with session.get(url=url, params=params, headers=headers, cookies=cookies, ssl=False) as resp:
+        html = await resp.text()  
+        # print(html)
+        url = await news_result(html)
+        return url
+
+
 async def getBriefing():
     async with aiohttp.ClientSession() as session:
         month = datetime.datetime.now().month
         day = datetime.datetime.now().day
         query = f'今日简报({month}月{day}日)易即今日'
-        url = 'https://weixin.sogou.com/weixin'
-        params = {
-            'type': 2,
-            's_from': 'input',
-            'ie': 'uft8',
-            '_sug_': 'n',
-            '_sug_type_': '',
-            'query': query
-        }
         headers = get_new_headers()
         cookies = get_new_cookies()
-        async with session.get(url=url, params=params, headers=headers, cookies=cookies, ssl=False) as resp:
-            html = await resp.text()  
-            # print(html)
-            url = await news_result(html)
-            url = await url_decode(url)
-            # print(url)
+        url = await search(session, cookies, headers, query)
+        if url is None:
+            query = f'“今日简报({month}月{day}日)” 易即今日'
+            url = await search(session, cookies, headers, query)
+        url = await url_decode(url)
+        url = 'https://weixin.sogou.com/weixin'
         params = {
             'wx_fmt': 'jpeg'
         }  

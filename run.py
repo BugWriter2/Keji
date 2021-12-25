@@ -36,6 +36,12 @@ def get_new_cookies():
                        allow_redirects=False)
     cookies = rst.cookies.get_dict()
     return cookies
+
+def parse_year(span_script):
+    m = re.search(r'\d{10}', span_script)
+    if m:
+        ts = int(m.match())
+        return datetime.datetime.fromtimestamp(ts).year
     
 async def news_result(html):
     soup = BS(html, 'html.parser')
@@ -44,10 +50,9 @@ async def news_result(html):
         try:
             url = li.a['href']
             div = li.find_all('div')[1]
-            print(div.div.span, dir(div.div))
-            if div.div.a.text == '易即今日' and '小时前' in div.div.span.text:
+            if div.div.a.text == '易即今日' and parse_year(div.div.span.text) == datetime.datetime.now().year:
                 return url
-            print(div.div.a.text, div.div.span.text)
+            print(div.div.a.text, parse_year(div.div.span.text))
         except Exception as e:
             print(e)
 

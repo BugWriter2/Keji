@@ -44,6 +44,7 @@ async def news_result(html):
         try:
             url = li.a['href']
             div = li.find_all('div')[1]
+            print(div.div.span, dir(div.div))
             if div.div.a.text == '易即今日' and '小时前' in div.div.span.text:
                 return url
             print(div.div.a.text, div.div.span.text)

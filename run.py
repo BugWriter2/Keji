@@ -40,7 +40,7 @@ def get_new_cookies():
 def parse_year(span_script):
     m = re.search(r'\d{10}', span_script)
     if m:
-        ts = int(m.match())
+        ts = int(m.group())
         return datetime.datetime.fromtimestamp(ts).year
     
 async def news_result(html):

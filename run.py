@@ -50,9 +50,9 @@ async def news_result(html):
         try:
             url = li.a['href']
             div = li.find_all('div')[1]
-            if div.div.a.text == '易即今日' and parse_year(div.div.span.text) == datetime.datetime.now().year:
+            if div.div.a.text == '易即今日' and parse_year(div.div.span.script.text) == datetime.datetime.now().year:
                 return url
-            print(div.div.a.text, parse_year(div.div.span.text))
+            print(div.div.a.text, parse_year(div.div.span.script.text))
         except Exception as e:
             print(e)
 

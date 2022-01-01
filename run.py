@@ -11,6 +11,7 @@ import re
 import random
 import time
 import datetime
+import pytz
 import requests
 from fake_useragent import UserAgent
 from bs4 import BeautifulSoup as BS
@@ -41,7 +42,7 @@ def parse_year(span_script):
     m = re.search(r'\d{10}', span_script)
     if m:
         ts = int(m.group())
-        return datetime.datetime.fromtimestamp(ts).year
+        return datetime.datetime.fromtimestamp(ts, pytz.timezone('Asia/Shanghai')).year
     
 async def news_result(html):
     soup = BS(html, 'html.parser')
@@ -50,7 +51,7 @@ async def news_result(html):
         try:
             url = li.a['href']
             div = li.find_all('div')[1]
-            if div.div.a.text == '易即今日' and parse_year(div.div.span.script.text) == datetime.datetime.now().year:
+            if div.div.a.text == '易即今日' and parse_year(div.div.span.script.text) == datetime.datetime.now(pytz.timezone('Asia/Shanghai')).year:
                 return url
             print(div.div.a.text, parse_year(div.div.span.script.text))
         except Exception as e:
@@ -85,8 +86,8 @@ async def search(session, cookies, headers, query):
 
 async def getBriefing():
     async with aiohttp.ClientSession() as session:
-        month = datetime.datetime.now().month
-        day = datetime.datetime.now().day
+        month = datetime.datetime.now(pytz.timezone('Asia/Shanghai')).month
+        day = datetime.datetime.now(pytz.timezone('Asia/Shanghai')).day
         query = f'今日简报({month}月{day}日)易即今日'
         headers = get_new_headers()
         cookies = get_new_cookies()
@@ -121,7 +122,7 @@ async def getBriefing():
                 file.write(bs)
         
 #         with open('./output/news.md', 'w') as file:
-#                 file.write(datetime.datetime.now().strftime('%Y-%m-%d %H:%M:%S'))
+#                 file.write(datetime.datetime.now(pytz.timezone('Asia/Shanghai')).strftime('%Y-%m-%d %H:%M:%S'))
 #                 file.write('\n')
 #                 file.write(f'![](./output/picture.jpg)')
     return 'output/img/news.jpg'

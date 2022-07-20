@@ -2,7 +2,7 @@ name: run
 
 on:
   schedule:
-    - cron: "00 3 * * *" #runs at 02:30 UTC everyday
+    - cron: "00 0 * * *" #runs at 08:00 UTC+8 everyday
   workflow_dispatch:
 
 jobs:

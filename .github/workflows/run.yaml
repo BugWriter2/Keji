@@ -22,6 +22,7 @@ jobs:
           pip install -r requirements.txt
       - name: execute py script # run the run.py to get the latest data
         run: |
+          rm -rf output/img/*
           python run.py
       - name: commit files
         run: |

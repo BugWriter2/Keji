@@ -1,7 +1,3 @@
-"""
-Code is stolen from https://github.com/AnJT/mirai
-"""
-
 import asyncio
 import json
 
@@ -19,7 +15,6 @@ import datetime
 year = datetime.datetime.now().year
 month = datetime.datetime.now().month
 day = datetime.datetime.now().day
-
 
 ua = UserAgent().random
 print(ua)
@@ -55,7 +50,7 @@ async def news_result(html):
         try:
             url = li.a['href']
             div = li.find_all('div')[1]
-            if div.div.a.text == '易即今日' and parse_year(div.div.span.script.text) == datetime.datetime.now(pytz.timezone('Asia/Shanghai')).year:
+            if "易即今日" in str(div) and "今日简报" in str(div):
                 return url
             print(div.div.a.text, parse_year(div.div.span.script.text))
         except Exception as e:
@@ -114,11 +109,12 @@ async def getBriefing():
             for u in url_list:
                 url += u.group(1)
             url = url.replace('http', 'https')
-            # print(url)
+            print(url)
         async with session.get(url=url, params=params, ssl=False, cookies=cookies, headers=headers) as resp:
             text = await resp.text()
-            bs = BS(text, "html.parser")
-            url = bs.find('div', id='img_list').img.get('src')
+            url = re.findall('<img data-src="(.*?)"',text)[0]
+            # bs = BS(text, "html.parser")
+            # url = bs.find('div', id='img_list').img.get('src')
 #             print(url)
         async with session.get(url=url,  ssl=False, cookies=cookies, headers=headers) as resp:
             with open(f'./output/img/news_{year}_{month}_{day}.jpg', 'wb') as file:

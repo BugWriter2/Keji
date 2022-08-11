@@ -2,7 +2,7 @@ name: run
 
 on:
   schedule:
-    - cron: "00 0 * * *" #runs at 08:00 UTC+8 everyday
+    - cron: "30 2 * * *" #runs at 02:30 UTC everyday
   workflow_dispatch:
 
 jobs:
@@ -22,7 +22,6 @@ jobs:
           pip install -r requirements.txt
       - name: execute py script # run the run.py to get the latest data
         run: |
-          rm -rf output/img/*
           python run.py
       - name: commit files
         run: |
